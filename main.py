@@ -19,7 +19,7 @@ for i in range(20):
     for j in range(20):
         current_button = Button(root,
                                text = f" ",
-                               font=("tahoma", 5, "bold"),
+                               font=("tahoma", 4, "bold"),
                                height = 1,
                                width = 1,
                                bg="gainsboro",
