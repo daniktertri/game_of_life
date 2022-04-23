@@ -5,7 +5,7 @@ root = Tk()
 matrix = [[0 for e in range(20)] for e in range(20)]
 
 def whenPressed(button):
-    button.configure(bg = "yellow")
+    button.configure(bg = "black")
 
 def near(pos: list , system=[[-1 , -1] , [-1 , 0] , [-1 , 1] , [0 , -1] , [0 , 1] , [1 , -1] , [1 , 0] , [1 , 1]]):
     count = 0
