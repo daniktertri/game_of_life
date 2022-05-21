@@ -1,65 +1,74 @@
 from tkinter import *
-import numpy as np
-import matplotlib.pyplot as plt
-import PIL
 import random
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg, NavigationToolbar2Tk)
-matrix = [[random.choice([0,1]) for e in range(20)] for e in range(20)]
-matrix2 = matrix
-def near(pos: list , system=[[-1 , -1] , [-1 , 0] , [-1 , 1] , [0 , -1] , [0 , 1] , [1 , -1] , [1 , 0] , [1 , 1]]):
-    count = 0
-    for i in system:
-        if matrix[(pos[0] + i[0]) % len(matrix)][(pos[1] + i[1]) % len(matrix[0])]:
-            count += 1
-    return count
 
-def num():
-    n1 = int(20)
-    n2 = int(20)
-    initBoard = np.zeros((n1, n2))
-
-    for i in range(len(matrix)):
-        for j in range(len(matrix)):
-            if matrix[i][j] == 0:
-               initBoard[i][j] = matrix[i][j] 
-            else:
-              initBoard[i][j] = matrix[i][j]
-    ax.imshow(initBoard)
-    canvas.draw_idle()
 
 root = Tk()
-root.title('Game of Life')
-root.geometry('800x600')
+root.title("Game of life")
+w_screen,h_screen = 806, 636
 
-fig = plt.figure()
-ax = fig.add_subplot(111) 
-ax.axis('off')
-canvas = FigureCanvasTkAgg(fig, master=root)  
-canvas.get_tk_widget().grid(row=4, column=0)
+root.geometry(f'{w_screen}x{h_screen}')
+canvas = Canvas(root, bg = "white")
+canvas.pack(fill="both",expand=True)
 
+n,m = 50,50
+matrix = [[random.choice([True,False])]for i in range(m) for j in range(n)]
+x_cam, y_cam = 0.3,0.7
+width_cam, height_cam = 10,10
 
-while True:
-    num()
-    mainloop()
+def update_screen():
+    for x in range(n):
+        for y in range(m):
+           x0_pix = (x - x_cam)* w_screen // width_cam
+           y0_pix = (y - y_cam)* h_screen // height_cam
+           
+           x1_pix = ((x+1) - x_cam)* w_screen // width_cam
+           y1_pix = ((y+1) - y_cam)* h_screen // height_cam
 
-    matrix2 = [[0 for j in range(len(matrix[0]))] for i in range(len(matrix))]
-    for i in range(len(matrix)):
-        for j in range(len(matrix[0])):
+           if matrix[x][y] == True:
+             canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'yellow', outline="black")
+           else:
+             canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'white', outline="black")               
 
-            if matrix[i][j]:
+update_screen()
 
-                if near([i , j]) not in (2 , 3):
-                    matrix2[i][j] = 0
-                    continue
+def left():
+  global x_cam
+  if x_cam > 0:
+    x_cam -= .2
+  else:
+      pass
+  update_screen()
 
-                matrix2[i][j] = 1
-                continue
+def right():
+    global x_cam
+    x_cam += .2
+    update_screen()
 
-            if near([i , j]) == 3:
-                matrix2[i][j] = 1
-                continue
+def plus():
+    global width_cam,height_cam
+    if width_cam > 12:
+      width_cam /= 1.2
+      height_cam /= 1.2
+    else: 
+        pass
+    update_screen()
 
-            matrix2[i][j] = 0
-    matrix = matrix2
-    print(1)
+def minus():
+    global width_cam,height_cam
+    if width_cam < 30:
+      width_cam *= 1.2
+      height_cam *= 1.2
+    else:
+        pass
+    update_screen()
+
+def click():
+    x_pos = None
+    y_pos = None
+root.bind('<Left>',left)
+root.bind('<Right>',right)
+root.bind('=',plus)
+root.bind('-',minus)
+root.bind('<Button-1>',click)
+
+mainloop()
