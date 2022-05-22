@@ -37,11 +37,11 @@ ax = fig.add_subplot(111)
 ax.axis('off')
 canvas = FigureCanvasTkAgg(fig, master=root)  
 canvas.get_tk_widget().grid(row=4, column=0)
-
+mainloop()
 
 while True:
     num()
-    #mainloop()
+
 
     matrix2 = [[0 for j in range(len(matrix[0]))] for i in range(len(matrix))]
     for i in range(len(matrix)):
@@ -63,3 +63,4 @@ while True:
             matrix2[i][j] = 0
     matrix = matrix2
     print(1)
+
