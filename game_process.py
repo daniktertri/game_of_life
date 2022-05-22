@@ -1,9 +1,6 @@
 from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam
-from view import canvas,root
+from view import root,canvas
 from tkinter import *
-
-
-
 
 ##screen update##
 def update_screen():
@@ -20,7 +17,36 @@ def update_screen():
            else:
              canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'white', outline="black")  
 
+def near(pos: list , system=[[-1 , -1] , [-1 , 0] , [-1 , 1] , [0 , -1] , [0 , 1] , [1 , -1] , [1 , 0] , [1 , 1]]):
+    count = 0
+    for i in system:
+        if matrix[(pos[0] + i[0]) % len(matrix)][(pos[1] + i[1]) % len(matrix[0])]:
+            count += 1
+    return count
 
+def update_cells_neighbors(self):
+    global matrix
+    matrix2 = [[0 for j in range(len(matrix[0]))] for i in range(len(matrix))]
+    for i in range(len(matrix)):
+        for j in range(len(matrix[0])):
+
+            if matrix[i][j]:
+
+                if near([i , j]) not in (2 , 3):
+                    matrix2[i][j] = 0
+                    continue
+
+                matrix2[i][j] = 1
+                continue
+
+            if near([i , j]) == 3:
+                matrix2[i][j] = 1
+                continue
+
+            matrix2[i][j] = 0
+    matrix = matrix2
+    update_screen()
+    
 
 
 ##fonction for bind##
@@ -56,8 +82,15 @@ def minus(event):
     update_screen()
 
 def click(event):
-    x_pos = None
-    y_pos = None
+    x_pos = event.x * width_cam // w_screen + x_cam
+    y_pos = event.y * height_cam // h_screen + y_cam
+
+    if matrix[round(x_pos)][round(y_pos)]:
+      matrix[round(x_pos)][round(y_pos)] = False
+    else:
+      matrix[round(x_pos)][round(y_pos)] = True
+
+
 
 
 ##bind##
@@ -66,7 +99,7 @@ root.bind('<Right>',right)
 root.bind('=',plus)
 root.bind('-',minus)
 root.bind('<Button-1>',click)
-
+root.bind('<Up>',update_cells_neighbors)
 
 update_screen()
 mainloop()
