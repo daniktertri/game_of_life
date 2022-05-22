@@ -1,6 +1,6 @@
 from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam
 from view import root,canvas
-from tkinter import *
+from tkinter import mainloop
 
 ##screen update##
 def update_screen():
