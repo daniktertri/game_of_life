@@ -2,7 +2,7 @@ import random
 
 ##cells data##
 n,m = 50,50
-matrix = [[random.choice([True,False])for e in range(m)] for e in range(n)]
+matrix = [[False for e in range(m)] for e in range(n)]
 
 ##cam and screen data##
 x_cam, y_cam = 0.3,0.7
