@@ -1,8 +1,10 @@
 from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam
 from view import root,canvas
-from tkinter import mainloop
+import tkinter
 
 ##screen update##
+
+
 def update_screen():
     global matrix
     for x in range(n):
@@ -13,9 +15,9 @@ def update_screen():
            x1_pix = ((x+1) - x_cam)* w_screen // width_cam
            y1_pix = ((y+1) - y_cam)* h_screen // height_cam           
            if matrix[x][y] == True:
-             canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'yellow', outline="black")
+             canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'yellow', outline="grey")
            else:
-             canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'white', outline="black")  
+             canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'white', outline="grey")  
 
 def near(pos: list , system=[[-1 , -1] , [-1 , 0] , [-1 , 1] , [0 , -1] , [0 , 1] , [1 , -1] , [1 , 0] , [1 , 1]]):
     count = 0
@@ -24,7 +26,8 @@ def near(pos: list , system=[[-1 , -1] , [-1 , 0] , [-1 , 1] , [0 , -1] , [0 , 1
             count += 1
     return count
 
-def update_cells_neighbors(self):
+
+def update_cells_neighbors():
     global matrix
     matrix2 = [[0 for j in range(len(matrix[0]))] for i in range(len(matrix))]
     for i in range(len(matrix)):
@@ -46,10 +49,24 @@ def update_cells_neighbors(self):
             matrix2[i][j] = 0
     matrix = matrix2
     update_screen()
-    
 
 
-##fonction for bind##
+# Buttons command fonctions# 
+
+def one_step_fc():
+    update_cells_neighbors()      
+def start_fc():
+    update_cells_neighbors()
+    root.after(700, start_fc)
+def clear_fc():
+    global matrix
+    matrix2 = [[0 for j in range(len(matrix[0]))] for i in range(len(matrix))]
+    matrix = matrix2
+
+
+
+##  fonction for bind     ##
+
 def left(event):
   global x_cam
   if x_cam > 0:
@@ -89,6 +106,7 @@ def click(event):
       matrix[round(x_pos)][round(y_pos)] = False
     else:
       matrix[round(x_pos)][round(y_pos)] = True
+    update_screen()
 
 
 
@@ -100,6 +118,14 @@ root.bind('=',plus)
 root.bind('-',minus)
 root.bind('<Button-1>',click)
 root.bind('<Up>',update_cells_neighbors)
+one_step = tkinter.Button(root, text ="One step", command = one_step_fc)
+one_step.pack()
+start_btn = tkinter.Button(root, text ="Start", command = start_fc)
+start_btn.pack()
+clear_btn = tkinter.Button(root, text ="Clear", command = clear_fc)
+clear_btn.pack()
+
+
 
 update_screen()
-mainloop()
+root.mainloop()
