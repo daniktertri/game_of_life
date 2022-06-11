@@ -1,4 +1,5 @@
-from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam
+from curses.panel import bottom_panel
+from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam,root_after
 from view import root,canvas
 import tkinter
 
@@ -56,13 +57,17 @@ def update_cells_neighbors():
 def one_step_fc():
     update_cells_neighbors()      
 def start_fc():
+    global root_after
     update_cells_neighbors()
-    root.after(700, start_fc)
+    root_after = root.after(700, start_fc)
 def clear_fc():
     global matrix
     matrix2 = [[0 for j in range(len(matrix[0]))] for i in range(len(matrix))]
     matrix = matrix2
-
+    update_screen()
+def stop_fc():
+    global root_after
+    root.after_cancel(root_after)
 
 
 ##  fonction for bind     ##
@@ -119,11 +124,15 @@ root.bind('-',minus)
 root.bind('<Button-1>',click)
 root.bind('<Up>',update_cells_neighbors)
 one_step = tkinter.Button(root, text ="One step", command = one_step_fc)
-one_step.pack()
+one_step.pack(side= 'bottom')
 start_btn = tkinter.Button(root, text ="Start", command = start_fc)
-start_btn.pack()
+start_btn.pack(side='bottom')
 clear_btn = tkinter.Button(root, text ="Clear", command = clear_fc)
-clear_btn.pack()
+clear_btn.pack(side='bottom')
+stop_btn = tkinter.Button(root, text ="Stop", command = stop_fc)
+stop_btn.pack(side='bottom')
+
+
 
 
 
