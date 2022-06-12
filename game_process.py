@@ -72,7 +72,6 @@ def stop_fc():
 
 
 ##  fonction for bind     ##
-
 def left(event):
   global x_cam
   if x_cam > 0:
