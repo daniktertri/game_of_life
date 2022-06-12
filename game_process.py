@@ -125,14 +125,23 @@ root.bind('=',plus)
 root.bind('-',minus)
 root.bind('<Button-1>',click)
 root.bind('<Up>',update_cells_neighbors)
+
+##buttons##
 one_step = tkinter.Button(root, text ="One step", command = one_step_fc)
 one_step.pack(side='right', padx=5, pady=5)
+
 start_btn = tkinter.Button(root, text ="Start", command = start_fc)
 start_btn.pack(side='left', padx=5, pady=5)
+
 clear_btn = tkinter.Button(root, text ="Clear", command = clear_fc)
 clear_btn.pack(side='right', padx=5, pady=5)
+
 stop_btn = tkinter.Button(root, text ="Stop", command = stop_fc)
 stop_btn.pack(side='left', padx=5, pady=5)
+
+##label##
+timer_label = tkinter.Label(text="", font=('Helvetica', 48), fg='red')
+timer_label.pack(side='bottom', padx=5, pady=5)
 
 
 
