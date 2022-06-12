@@ -62,6 +62,7 @@ def start_fc():
     root_after = root.after(700, start_fc)
 def clear_fc():
     global matrix
+    root.after_cancel(root_after)
     matrix2 = [[0 for j in range(len(matrix[0]))] for i in range(len(matrix))]
     matrix = matrix2
     update_screen()
