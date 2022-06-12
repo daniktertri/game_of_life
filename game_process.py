@@ -60,6 +60,7 @@ def start_fc():
     global root_after
     update_cells_neighbors()
     root_after = root.after(700, start_fc)
+    start_btn["state"] = "disabled"
 def clear_fc():
     global matrix
     root.after_cancel(root_after)
@@ -69,6 +70,7 @@ def clear_fc():
 def stop_fc():
     global root_after
     root.after_cancel(root_after)
+    start_btn["state"] = "normal"
 
 
 ##  fonction for bind     ##
