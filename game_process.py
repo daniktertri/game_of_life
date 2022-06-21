@@ -1,5 +1,5 @@
-from curses.panel import bottom_panel
-from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam,root_after
+import time
+from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam,root_after,timer_update
 from view import root,canvas
 import tkinter
 
@@ -16,7 +16,7 @@ def update_screen():
            x1_pix = ((x+1) - x_cam)* w_screen // width_cam
            y1_pix = ((y+1) - y_cam)* h_screen // height_cam           
            if matrix[x][y] == True:
-             canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'yellow', outline="grey")
+             canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'black', outline="grey")
            else:
              canvas.create_rectangle(x0_pix, y0_pix, x1_pix,y1_pix, fill= 'white', outline="grey")  
 
@@ -59,6 +59,7 @@ def one_step_fc():
 def start_fc():
     global root_after
     update_cells_neighbors()
+    update_timer()
     root_after = root.after(700, start_fc)
     start_btn["state"] = "disabled"
 def clear_fc():
@@ -68,18 +69,16 @@ def clear_fc():
     matrix = matrix2
     update_screen()
 def stop_fc():
-    global root_after
+    global root_after,timer_update
     root.after_cancel(root_after)
+    root.after_cancel(timer_update)
     start_btn["state"] = "normal"
-
 
 ##  fonction for bind     ##
 def left(event):
   global x_cam
   if x_cam > 0:
     x_cam -= .2
-  else:
-      pass
   update_screen()
 
 def right(event):
@@ -87,13 +86,21 @@ def right(event):
     x_cam += .2
     update_screen()
 
+def up(event):
+    global y_cam
+    y_cam -= .2
+    update_screen()
+
+def down(event):
+    global y_cam
+    y_cam += .2
+    update_screen()
+
 def plus(event):
     global width_cam,height_cam
     if width_cam > 12:
       width_cam /= 1.2
       height_cam /= 1.2
-    else: 
-        pass
     update_screen()
 
 def minus(event):
@@ -101,8 +108,6 @@ def minus(event):
     if width_cam < 30:
       width_cam *= 1.2
       height_cam *= 1.2
-    else:
-        pass
     update_screen()
 
 def click(event):
@@ -115,7 +120,11 @@ def click(event):
       matrix[round(x_pos)][round(y_pos)] = True
     update_screen()
 
-
+def update_timer():
+    global timer_update
+    now = time.strftime("%H:%M:%S")
+    timer_label.configure(text=now)
+    timer_update = root.after(1000,update_timer)
 
 
 ##bind##
@@ -124,7 +133,8 @@ root.bind('<Right>',right)
 root.bind('=',plus)
 root.bind('-',minus)
 root.bind('<Button-1>',click)
-root.bind('<Up>',update_cells_neighbors)
+root.bind('<Up>',up)
+root.bind('<Down>',down)
 
 ##buttons##
 one_step = tkinter.Button(root, text ="One step", command = one_step_fc)
