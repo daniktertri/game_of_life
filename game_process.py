@@ -59,12 +59,12 @@ def one_step_fc():
 def start_fc():
     global root_after
     update_cells_neighbors()
-    update_timer()
     root_after = root.after(700, start_fc)
     start_btn["state"] = "disabled"
 def clear_fc():
     global matrix
-    root.after_cancel(root_after)
+    if root_after == "root.after(700, start_fc)":
+     root.after_cancel(root_after)
     matrix2 = [[0 for j in range(len(matrix[0]))] for i in range(len(matrix))]
     matrix = matrix2
     update_screen()
