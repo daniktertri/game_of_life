@@ -1,5 +1,5 @@
 import time
-from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam,root_after,timer_update
+from model import n,m,matrix,x_cam,y_cam,w_screen,h_screen,width_cam,height_cam,root_after
 from view import root,canvas
 import tkinter
 
@@ -69,9 +69,8 @@ def clear_fc():
     matrix = matrix2
     update_screen()
 def stop_fc():
-    global root_after,timer_update
+    global root_after
     root.after_cancel(root_after)
-    root.after_cancel(timer_update)
     start_btn["state"] = "normal"
 
 ##  fonction for bind     ##
@@ -120,12 +119,6 @@ def click(event):
       matrix[round(x_pos)][round(y_pos)] = True
     update_screen()
 
-def update_timer():
-    global timer_update
-    now = time.strftime("%H:%M:%S")
-    timer_label.configure(text=now)
-    timer_update = root.after(1000,update_timer)
-
 
 ##bind##
 root.bind('<Left>',left)
@@ -148,10 +141,6 @@ clear_btn.pack(side='right', padx=5, pady=5)
 
 stop_btn = tkinter.Button(root, text ="Stop", command = stop_fc)
 stop_btn.pack(side='left', padx=5, pady=5)
-
-##label##
-timer_label = tkinter.Label(text="", font=('Helvetica', 48), fg='red')
-timer_label.pack(side='bottom', padx=5, pady=5)
 
 
 
