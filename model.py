@@ -11,4 +11,3 @@ w_screen,h_screen = 806, 636
 
 ##mainscript
 root_after = None
-timer_update = None
